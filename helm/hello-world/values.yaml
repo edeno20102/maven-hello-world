@@ -1,5 +1,5 @@
 image:
-  repository: my-docker-repo/hello-world
+  repository: my-docker-repo/hello-world:latest
   tag: "1.0.0"
   pullPolicy: IfNotPresent
 
