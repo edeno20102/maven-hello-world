@@ -13,26 +13,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # שלב 1: שליפת הקוד מהרפוזיטורי
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # שלב 2: התקנת Java
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # שלב 3: בניית JAR עם Maven
       - name: Build JAR
         run: mvn clean package --file myapp/pom.xml
 
-      # שלב 4: בניית Docker Image
       - name: Build Docker Image
         run: docker build -t my-docker-repo/hello-world:${{ github.sha }} .
 
-      # שלב 5: העלאת Docker Image ל-Docker Hub
       - name: Push Docker Image to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -41,7 +36,6 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push my-docker-repo/hello-world:${{ github.sha }}
 
-      # שלב 6: פריסה באמצעות Helm (אופציונלי)
       - name: Deploy to Kubernetes with Helm
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
